@@ -1,0 +1,69 @@
+@page  "/Produto/CadastrarProduto"
+@using System.Net.Http
+@inject HttpClient Http
+
+
+
+<div class="card m-1">
+    <h4 class="card-header">Cadastro de Produto</h4>
+    <div class="card-body">
+        <EditForm Model="@product" OnValidSubmit="HandleValidSubmit" @onreset="HandleReset">
+            <DataAnnotationsValidator />
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label>Nome</label>
+                    <InputText @bind-Value="product.nome" class="form-control" />
+                    <ValidationMessage For="@(() => product.nome)" />
+                </div>
+                <div class="form-group col-6">
+                    <label>Preço</label>
+                    <InputNumber @bind-Value="product.preco" class="form-control" />
+                    <ValidationMessage For="@(() => product.preco)" />
+                </div>
+            </div>
+                <div class="form-row">
+                    <div class="form-group col-12">
+                    <label>Descrição</label>
+                    <InputTextArea @bind-Value="product.descricao" class="form-control" />
+                    <ValidationMessage For="@(() => product.descricao)" />
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mr-1">Salvar</button>
+                <button type="reset" class="btn btn-secondary">Resetar</button>
+            </div>
+    
+        </EditForm>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+@code {
+    private Product product = new Product();
+    private EditContext editContext { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        //Enviar dados para o Controller no Backend
+        var teste = await Http.PostAsJsonAsync("Product/Create", product);
+
+
+    }
+
+    private void HandleReset()
+    {
+        product = new Product();
+        editContext = new EditContext(product);
+    }
+
+
+
+}
