@@ -50,7 +50,57 @@ public class ProductController : Controller
         }
     }
 
-    
+    [HttpGet]
+    [Route("GetId")]
+    public async Task<IActionResult> Get([FromQuery] string id)
+    {
+        // procura no banco na tabela products se tem algum Id igual e retorna o produto com todas suas informações
+        var produto = await db.Products.SingleOrDefaultAsync(p => p.Id == Convert.ToInt32(id));
+        return Ok(produto);
+    }
 
+    
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> Put([FromBody] Product produto)
+    {
+        if (!ModelState.IsValid){
+
+            return BadRequest(ModelState);
+
+        }
+
+        db.Entry(produto).State = EntityState.Modified;
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw (ex);
+        }
+        return NoContent();
+    }
+
+
+    [HttpDelete]
+    [Route("Delete/{id}")]
+    public async Task<ActionResult <User>> Delete(int id)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var produto = await db.Products.FindAsync(id);
+        if(produto == null)
+        {
+            return NotFound();
+        }
+
+        db.Products.Remove(produto);
+        await db.SaveChangesAsync();
+        return Ok(produto);
+    }
 
 }

@@ -1,6 +1,7 @@
 @page  "/Produto/ListarProduto"
 @using System.Net.Http
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 
 <h3>Produtos</h3>
@@ -23,6 +24,10 @@
                 <td>@item.nome</td>
                 <td>@String.Format("{0, 0:C2}", @item.preco)</td>
                 <td>@item.descricao</td>
+                <td>
+                    <a href="/Produto/EditarProduto/@item.Id.ToString()" ><button class="btn btn-success">Editar</button></a>
+                    <button class="btn btn-danger" @onclick="@(() => DeleteProduct(item.Id))">Deletar</button>
+                </td>
     
             </tr>
             }   
@@ -44,5 +49,13 @@
         }
     }
 
+    private async Task DeleteProduct(int itemId)
+    {
+        //call controller
+        await Http.DeleteAsync("/Product/Delete/"+itemId);
+        NavigationManager.NavigateTo("Produto/ListarProduto", true); // true força loading
+    }
+
+ 
     
 }

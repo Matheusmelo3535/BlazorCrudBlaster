@@ -8,7 +8,7 @@ namespace Mysql_blazor2.Shared
 {
     public class Product
     {
-        [Required]
+        
         public int Id { get; set; }
         [Required]
         public string  nome { get; set; }
