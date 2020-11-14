@@ -1,0 +1,53 @@
+@page "/Login"
+@using System.Net.Http
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+
+
+<div class="container">
+        <EditForm Model="@user" OnValidSubmit= "HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-row justify-content-center">
+                <div class="form-group col-6">
+                    <label>E-mail</label>
+                    <InputText @bind-Value = "user.Email"  class="form-control"/>
+                    <ValidationMessage For="@( () => user.Email)" />
+                </div>
+            </div>
+
+            <div class="form-row justify-content-center">
+                <div class="form-group col-6">
+                    <label>Senha</label>
+                    <InputText @bind-Value = "user.Password"  class="form-control"/>
+                    <ValidationMessage For="@( () => user.Password)" />
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mr-1">Entrar</button>
+                <button type="reset" class="btn btn-secondary">Resetar</button>
+            </div>
+        </EditForm>
+</div>
+
+
+
+@code {
+
+
+    User user = new User();
+
+
+    private async Task HandleValidSubmit()
+    {
+        
+        await Http.PostAsJsonAsync("User/LoginUser", user);
+        NavigationManager.NavigateTo("/", true);
+        
+
+
+    }
+
+
+}

@@ -12,7 +12,7 @@ namespace Mysql_blazor2.Server
 
         public DbSet<Product> Products { get; set; }
 
-
+        public DbSet<User> Users { get; set;}
     }
 
 
